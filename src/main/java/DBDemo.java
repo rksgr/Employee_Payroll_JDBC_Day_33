@@ -7,10 +7,6 @@ public class DBDemo {
     public static void main(String[] args) {
         System.out.println("Today we shall solve use cases related to Employee Payroll using JDBC.");
 
-
-
-
-
    /*
         Use Case 1: Create a payroll service database and have java program connect to database
          */
