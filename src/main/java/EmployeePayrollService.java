@@ -16,8 +16,11 @@ public class EmployeePayrollService {
     private EmployeePayrollDBService employeePayrollDBService;
 
     public EmployeePayrollService(){
+
+        // employeepayrolldbservice is a
         employeePayrollDBService = EmployeePayrollDBService.getInstance();
     }
+
     public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList){
         this();
         this.employeePayrollList = employeePayrollList;
@@ -31,11 +34,14 @@ public class EmployeePayrollService {
 
 
     public boolean checkEmployeePayrollInSyncWithDB(String name) {
-        return false;
+        List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
+        //System.out.println("returned by check "+ employeePayrollDataList.get(0).equals(getEmployeePayrollData(name)));
+        return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
     }
 
 
     public void updateEmployeeSalary(String name, double basic_pay) {
+        //String sql = String.format("update employee_payroll set basic_pay=%.2f where name= '%s';",basic_pay,name);
         int result = employeePayrollDBService.updateEmployeeData(name,basic_pay);
         if (result == 0) return;
         EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
