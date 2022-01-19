@@ -24,7 +24,7 @@ public class EmployeePayrollDBService {
     private void prepareStatementForEmployeeData() {
         try{
             Connection connection = this.getConnection();
-            String sql = "SELECT * FROM employee_payroll WHERE name =?";
+            String sql = "SELECT * FROM employee_payroll WHERE name = ?";
             employeePayrollDataStatement = connection.prepareStatement(sql);
         }catch(SQLException e){
             e.printStackTrace();
@@ -32,12 +32,14 @@ public class EmployeePayrollDBService {
     }
     public List<EmployeePayrollData> getEmployeePayrollData(String name){
         List<EmployeePayrollData> employeePayrollList = null;
+        // lazy
         if (this.employeePayrollDataStatement == null){
             this.prepareStatementForEmployeeData();
         }
         try{
             employeePayrollDataStatement.setString(1,name);
             ResultSet resultSet = employeePayrollDataStatement.executeQuery();
+            employeePayrollList = this.getEmployeePayrollData(resultSet);
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -50,7 +52,7 @@ public class EmployeePayrollDBService {
                 int emp_id = resultSet.getInt("emp_id");
                 String name = resultSet.getString("name");
                 double basic_pay = resultSet.getDouble("basic_pay");
-                LocalDate start_date = resultSet.getDate("start_date").toLocalDate();
+                Date start_date = resultSet.getDate("start_date");
                 employeePayrollList.add(new EmployeePayrollData(emp_id, name, basic_pay, start_date));
             }
         }catch(SQLException e){
@@ -87,10 +89,21 @@ public class EmployeePayrollDBService {
         return employeePayrollList;
     }
     public int updateEmployeeData(String name, double basic_pay){
-        return this.updateEmployeeDataUsingStatement(name,basic_pay);
+        String sql = String.format("update employee_payroll set basic_pay= %.2f where name= '%s';",basic_pay,name);
+        try(Connection connection = this.getConnection()){
+            Statement statement = connection.createStatement();
+            return statement.executeUpdate(sql);
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
+
+    /*
+    Use Case 3: Update basic pay for an employee and sync that with the database
+     */
     private int updateEmployeeDataUsingStatement(String name,double basic_pay){
-        String sql = String.format("update employee_payroll set basic_pay= %f where name= '%s;',basic_pay,name");
+        String sql = String.format("update employee_payroll set basic_pay= %.2f where name= '%s';",basic_pay,name);
         try(Connection connection = this.getConnection()){
             Statement statement = connection.createStatement();
             return statement.executeUpdate(sql);
@@ -100,3 +113,21 @@ public class EmployeePayrollDBService {
         return 0;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
