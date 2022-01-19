@@ -52,7 +52,7 @@ public class EmployeePayrollDBService {
                 int emp_id = resultSet.getInt("emp_id");
                 String name = resultSet.getString("name");
                 double basic_pay = resultSet.getDouble("basic_pay");
-                Date start_date = resultSet.getDate("start_date");
+                LocalDate start_date = resultSet.getDate("start_date").toLocalDate();
                 employeePayrollList.add(new EmployeePayrollData(emp_id, name, basic_pay, start_date));
             }
         }catch(SQLException e){
@@ -78,7 +78,6 @@ public class EmployeePayrollDBService {
         String sql = "SELECT * FROM employee_payroll";
         List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
         try(Connection connection = this.getConnection()) {
-            
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             employeePayrollList = this.getEmployeePayrollData(resultSet);
