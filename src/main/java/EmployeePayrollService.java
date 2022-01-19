@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 public class EmployeePayrollService {
 
-
     public enum IOService{
         CONSOLE_IO, FILE_IO, DB_IO, REST_IO
     }
@@ -30,15 +29,25 @@ public class EmployeePayrollService {
         return this.employeePayrollList;
     }
 
-
     public boolean checkEmployeePayrollInSyncWithDB(String name) {
         List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
         return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
     }
 
+    public boolean checkEmployeePayrollInSyncWithDBPrepared(String name) {
+        List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
+        return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
+    }
 
     public void updateEmployeeSalary(String name, double basic_pay) {
         int result = employeePayrollDBService.updateEmployeeData(name,basic_pay);
+        if (result == 0) return;
+        EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+        if (employeePayrollData != null) employeePayrollData.basic_pay = basic_pay;
+    }
+
+    public void updateEmployeeSalaryPreparedStmt(String name, double basic_pay) {
+        int result = employeePayrollDBService.updateEmployeeDataPreparedStmt(name,basic_pay);
         if (result == 0) return;
         EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
         if (employeePayrollData != null) employeePayrollData.basic_pay = basic_pay;
