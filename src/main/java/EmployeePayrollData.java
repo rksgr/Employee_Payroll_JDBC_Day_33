@@ -5,7 +5,7 @@ public class EmployeePayrollData {
     public int emp_id;
     public String name;
     public double basic_pay;
-    public Date startDate;
+    public LocalDate startDate;
 
     public EmployeePayrollData(int emp_id, String name, double salary){
         this.emp_id = emp_id;
@@ -13,7 +13,7 @@ public class EmployeePayrollData {
         this.basic_pay = salary;
     }
 
-    public EmployeePayrollData(int emp_id, String name, double salary, Date startDate){
+    public EmployeePayrollData(int emp_id, String name, double salary, LocalDate startDate){
         this(emp_id,name,salary);
         this.startDate = startDate;
     }
