@@ -20,8 +20,9 @@ public class EmployeePayrollServiceTest {
     public void givenNewSalaryForEmployee_WhenUpdated_ShouldSyncWithDB(){
         EmployeePayrollService employeePayrollService = new EmployeePayrollService();
         List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
-        employeePayrollService.updateEmployeeSalary("Terissa",3700000.0);
-        boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terissa");
+
+        employeePayrollService.updateEmployeeSalary("Terisa",3700000.0);
+        boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
         Assert.assertTrue(result);
     }
 }
