@@ -87,6 +87,9 @@ public class EmployeePayrollDBService {
         }
         return employeePayrollList;
     }
+    /*
+    Use Case 3: Update basic pay for an employee and sync that with the database
+     */
     public int updateEmployeeData(String name, double basic_pay){
         String sql = String.format("update employee_payroll set basic_pay= %.2f where name= '%s';",basic_pay,name);
         try(Connection connection = this.getConnection()){
@@ -97,14 +100,14 @@ public class EmployeePayrollDBService {
         }
         return 0;
     }
-
-    /*
-    Use Case 3: Update basic pay for an employee and sync that with the database
+        /*
+    Use Case 4: Update basic pay for an employee using PreparedStatement and sync that with the database
      */
-    private int updateEmployeeDataUsingStatement(String name,double basic_pay){
+    public int updateEmployeeDataPreparedStmt(String name,double basic_pay){
         String sql = String.format("update employee_payroll set basic_pay= %.2f where name= '%s';",basic_pay,name);
-        try(Connection connection = this.getConnection()){
-            Statement statement = connection.createStatement();
+        try{
+            Connection connection = this.getConnection();
+            Statement statement = connection.prepareStatement(sql);
             return statement.executeUpdate(sql);
         }catch(SQLException e) {
             e.printStackTrace();
