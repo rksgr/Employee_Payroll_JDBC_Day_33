@@ -19,10 +19,24 @@ public class EmployeePayrollServiceTest {
     @Test
     public void givenNewSalaryForEmployee_WhenUpdated_ShouldSyncWithDB(){
         EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-        List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
+        List<EmployeePayrollData> employeePayrollData =
+                employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
 
         employeePayrollService.updateEmployeeSalary("Terisa",3700000.0);
         boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
+        Assert.assertTrue(result);
+    }
+
+    /*
+    Use case 4: Update base pay for Terisa using Prepared statement and sync it with database
+     */
+    @Test
+    public void givenNewSalaryForEmployee_WhenUpdated_ShouldSyncWithDB_UsePrepared(){
+        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+        List<EmployeePayrollData> employeePayrollData =
+                employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
+        employeePayrollService.updateEmployeeSalaryPreparedStmt("Terisa",3700000.0);
+        boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDBPrepared("Terisa");
         Assert.assertTrue(result);
     }
 }
